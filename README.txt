@@ -1,5 +1,5 @@
 Yet Another Backup Assistant:
-------------------------------------
+-----------------------------
 
 - Language : Dans une optique d'apprentissage, le projet sera réalisé dans 2 langages afin de bien en saisir leurs subtilités ainsi que leurs différences de manière concrète. Dans un premier temps en Python3 puis en C++
 
