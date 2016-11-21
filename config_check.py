@@ -15,20 +15,6 @@ def config_error():
 #}
 
 
-def walk(element):
-    """ walk(element): -> list of "Element"
-        element is an object from class Element that contain the root path du walk through.
-        Parse the tree to backup starting at the root from the element given in argument, 
-        and returns a list of all files and dirs as Objects from class 'Element' """
-    tree = []
-    tree.append(element)
-    for element in tree:
-        if element.what == "DIR":
-            for some in os.listdir(element.path):
-                tree.append(Element(os.path.join(element.path, some)))
-    return tree
-
-
 def handle_directory(configFd, configLst, defaultStoragePath):
 #{
     """handle_directory(configFd, configLst, defaultStoragePath) where:
@@ -59,6 +45,17 @@ def handle_directory(configFd, configLst, defaultStoragePath):
             elif lineLst[0] == "ignored_files": #{
                 lineLst.remove("ignored_files")
                 bkpIgnored = lineLst
+                for arg in bkpIgnored: #{ On vérifie qu'il n'y ait qu'un seul '*' au maximum par éléments
+                    starCounter = 0
+                    for char in arg: #{
+                        if char == '*':
+                            starCounter+=1
+                        if starCounter > 1:
+                            print("Fichiers à ignorer: syntaxe incorrecte")
+                            config_error()
+                #}
+            #}
+
             #}
             elif lineLst[0] == "storage_path": #{
                 bkpStoragePath = lineLst[1]
@@ -77,11 +74,12 @@ def handle_directory(configFd, configLst, defaultStoragePath):
 
 
 def check_configuration(configPath):
+#{
     """ chech_configuration(PATH/TO/CONIGURATION/FILE)
-        Analyse les paramètres dans le fichier yaba.conf et retourne une liste d'objet de la classe Config."""
+    Analyse les paramètres dans le fichier yaba.conf et retourne une liste d'objet de la classe Config."""
 
-    line            = "init"
-    lineLst         = []
+    line = "init"
+    lineLst = []
 
     # Variables temporaires de configuration
     defaultStoragePath   = ""
@@ -99,23 +97,25 @@ def check_configuration(configPath):
     print(30 * "-", "\n")
 
     line = configFd.readline()
-    while line != "":
+    while line != "": #{
         #input("DEBUG 1")
-        if (line[0] != "#") and (line.replace(' ','') != "\n"):
+        if (line[0] != "#") and (line.replace(' ','') != "\n"): #{
             lineLst = line.split()
-            if lineLst[0] == "default_storage_path":
+            if lineLst[0] == "default_storage_path": #{
                 defaultStoragePath = lineLst[1]
                 line = configFd.readline()
                 lineLst = line.split()
-                print("Répertoire de stockage par défaut: ", defaultStoragePath)
                 continue
-            elif lineLst[0] == "<backup_directory>":
-                print("Handling Directory...")
+            #}
+            elif lineLst[0] == "<backup_directory>": #{
                 handle_directory(configFd, configLst, defaultStoragePath)
+            #}
+        #}
 
         line = configFd.readline()
+    #}
 
     print(30 * "-")
     input("Appuyez sur ENTER pour continuer")
     return configLst
-
+#}
