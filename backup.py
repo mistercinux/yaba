@@ -11,9 +11,9 @@ def check_ignored(name):
     # Plutôt qu'une fonction, définir une class ignore_table() avec une méthode check(name)
 
 def walk(element_, ignoredLst_):
-    """ walk(element, fileLst): -> list of "Element"
+    """ walk(element, ignoredLst): -> list of "Element"
         element is an object from class Element that contain the root path du walk through.
-        fileLst is a list op strings of the king of files to ignore.
+        ignoredLst is a list op strings of the king of files to ignore.
         Parse the tree to backup starting at the root from the element given in argument,
         and returns a list of all files and dirs as Objects from class 'Element' """
 
@@ -75,11 +75,11 @@ def walk(element_, ignoredLst_):
         #}
     #}
 
-    print("Fichiers ignorés :")
-    print("Portant les noms: ", ignoreFilesLst)
-    print("Fichiers Comencants par :", startsWithLst)
-    print("Fichiers finissants par :", endsWithLst)
-    print("Les fichiers suivants ont été ignorés :", finalIgnoredLst)
+    #print("Fichiers ignorés :")
+    #print("Portant les noms: ", ignoreFilesLst)
+    #print("Fichiers Comencants par :", startsWithLst)
+    #print("Fichiers finissants par :", endsWithLst)
+    #print("Les fichiers suivants ont été ignorés :", finalIgnoredLst)
     return tree
 
 
