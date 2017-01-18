@@ -1,14 +1,53 @@
 #!/usr/bin/python3
 # -*-coding:Utf-8 -*
 import os
+import tarfile
+import time
 from objects import *
 from backup import *
 
+def write_backup(config, elementLst_): #{
+#    indexPath = os.path.join(config.storage, "index.yaba")
+#    try: fd = open(indexPath, "w")
+#    except  FileNotFoundError: #{
+#        print("L'index de fichiers ne peut être créé car le dossier de stockage spécifié n'existe pas ou n'est pas accessible")
+#        exit()
+#    #}
 
-def check_ignored(name):
-    """ compare 'name' à la liste de fichiers à ignorer """
-    pass
-    # Plutôt qu'une fonction, définir une class ignore_table() avec une méthode check(name)
+    date = str(time.gmtime().tm_year) + "-" + str(time.gmtime().tm_mon) + "-" + str(time.gmtime().tm_mday)
+
+#    print("Racine de la sauvegarde:" + config.root)
+#    print("Emplacement de la sauvegarde:" + config.storage)
+#    print("Date de la sauvegarde:" + date)
+    tarPath = config.storage + config.name + "-" + date + ".tar.bz2"
+#    tarFd = tarfile.TarFile.open(tarPath, "w")
+    try :
+        tarFd = tarfile.TarFile.bz2open(tarPath, "w")
+    except:
+        print("\n\n!!! Erreur d'écriture de la sauvegarde. Le dossier", config.storage, "n'est pas accessible en écriture.\n")
+        exit()
+    for some in elementLst_: #{
+        if some.path != config.root: #{
+            #PATH:taille:MD5:DATE
+            print("Ajout de :", some.path)
+            sPATH = some.path.replace(config.root, "")
+            iSIZE = os.path.getsize(some.path)
+            sSIZE = str(iSIZE)
+            sMD5 = some.md5
+            iTIME = os.path.getmtime(some.path)
+            sTIME = str(iTIME)
+            # print(sPATH + ':' + sSIZE + ':' + sMD5 + ':' + sTIME + '\n')
+            #tarFd.add(some.path, arcname=some.path.replace(config.root, ""), recursive=False)
+            tarFd.add(some.path, recursive=False)
+        #}
+    #}
+    tarFd.close()
+#}
+
+#def check_ignored(name):
+#    """ compare 'name' à la liste de fichiers à ignorer """
+#    pass
+#    # Plutôt qu'une fonction, définir une class ignore_table() avec une méthode check(name)
 
 def walk(element_, ignoredLst_):
     """ walk(element, ignoredLst): -> list of "Element"

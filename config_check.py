@@ -4,6 +4,7 @@ import os
 from objects import *
 
 configPath      = "yaba.conf"
+
 configPath      = os.path.abspath(configPath)
 
 def config_error():
@@ -59,6 +60,8 @@ def handle_directory(configFd, configLst, defaultStoragePath):
             #}
             elif lineLst[0] == "storage_path": #{
                 bkpStoragePath = lineLst[1]
+                if bkpStoragePath[-1] != "/":
+                    bkpStoragePath = bkpStoragePath + "/"
             #}
         #}
         line = configFd.readline()
@@ -90,7 +93,7 @@ def check_configuration(configPath):
     try:
         configFd = open(configPath, "r")
     except FileNotFoundError:
-        print("Fichier de configuration introuvable:", configPath)
+        print("Fichier de configuration introuvable:", configPath, "\n Vérifiez si le fichier existe et si vous avez les droits d'accès")
         exit()
 
     print("Lecture de la configuration...")
@@ -103,6 +106,8 @@ def check_configuration(configPath):
             lineLst = line.split()
             if lineLst[0] == "default_storage_path": #{
                 defaultStoragePath = lineLst[1]
+                if defaultStoragePath[-1] != "/":
+                    defaultStoragePath = defaultStoragePath + "/"
                 line = configFd.readline()
                 lineLst = line.split()
                 continue

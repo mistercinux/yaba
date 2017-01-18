@@ -36,5 +36,8 @@ for conf in configLst: #{
         first_element = Element(bkp_path)
         element_tree = walk(first_element, conf.ignoredFiles)
     #}
+
+    write_backup(conf, element_tree)
+
 #}
 

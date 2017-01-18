@@ -27,15 +27,17 @@ class Config:
         if storage_dir == "":
             print("Erreur: Aucun repertoire de stockage par défaut dans le fichier de configuration")
             exit()
+        if root[-1] == '/':
+            root = root[0:-1]
+        print("---- Configuration détéctée ----")
         self.root         = root            # Emplacements des éléments à sauvegarder
         self.ignoredFiles = ignored_files   # Fichiers ignorés lors de la sauvegarde
         self.storage      = storage_dir     # Emplacement de la sauvegarde
         self.name         = name            # Nom de la sauvegarde
-        print("---- Configuration détéctée ----")
-        print("Racine:", self.root)
-        print("Nom:", self.name)
-        print("fihiers ignorés: ", self.ignoredFiles)
-        print("Storage path: ", self.storage)
+        print("Racine à sauvegarder:", self.root)
+        print("Nom de la sauvegarde:", self.name)
+        print("Fichiers à ignorer:", self.ignoredFiles)
+        print("Emplacement de la sauvegarde:", self.storage)
         print("\n")
 
 class Element:
@@ -57,23 +59,18 @@ class Element:
 
         if self.what == "FILE":
             self.md5 = hashlib.sha224(open(self.path, "rb").read()).hexdigest()
-
+        else:
+            self.md5 = ""
         self.lastMod = os.path.getmtime(self.path) # date de dernière modification
         self.lastAcc = os.path.getatime(self.path) # date de dernier accès
 
-        print(self.what.ljust(4), " : ", self.path)
-        if self.what == "FILE":
-            print("md5sum = ", self.md5)
+#        print(self.what.ljust(4), " : ", self.path)
+#        if self.what == "FILE":
+#            print("md5sum = ", self.md5)
 
         #print("Last Acces : ", self.lastAcc)
         #print("Last Modif : ", self.lastMod)
 
-
-    def inspect(self):
-        return 0
-
-    def addToIndex(self):
-        return 0
 
 
 
